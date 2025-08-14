@@ -1,0 +1,35 @@
+@use "variables" as v;
+@use "animations";
+
+footer{
+    margin-top: 20px;
+    height: 18vh;
+    width: auto;
+    .foot{
+        height: 8vh;
+        width: 8vh;
+    }
+    .wp{
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        height: 8vh;
+        width: 8vh;
+        @extend %vibrar;
+    }
+}
+@include v.mobile{
+    footer{
+    position: absolute;
+    margin-bottom: 0;
+    flex-direction: column;
+    .foot{
+        height: 40px;
+        width: 40px;
+    }
+    .wp{
+        height: 50px;
+        width: 50px;
+    }
+}
+}

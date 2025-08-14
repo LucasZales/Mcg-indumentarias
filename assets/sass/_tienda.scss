@@ -1,0 +1,61 @@
+@use "variables" as v;
+
+.ul{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr ;
+    list-style: none;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    justify-content: space-around;
+    background-color: grey;
+    border: solid 2px black;
+    border-radius: 50px;
+    color: black;
+    padding: 10px;
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+    padding: 40px;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+    .logo{
+    height: 40vh;
+    width: 40vh;
+    }
+    button{
+    padding: 3px 8px;
+    border-radius: 10px;
+    &:hover{
+    background-color: rgb(56, 49, 49);
+    color: antiquewhite;
+    }
+    }
+    #id{
+    text-align: center;
+    border: solid black 1px;
+    background-color: rgb(226, 220, 220);
+    margin-top: 15px;
+    gap: 10px;
+    height: 3vh;
+    width: 40vh;
+    }
+    }
+
+    @include v.mobile{
+        .ul{
+            margin-top: 15px;
+            gap: 20px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            justify-content: center;
+            
+            align-items: center;
+            button{
+                padding: 1px 7px;
+                &:hover{
+                background-color: rgb(56, 49, 49);
+                color: antiquewhite;
+                }
+                }
+        }
+    }

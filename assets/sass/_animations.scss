@@ -1,0 +1,33 @@
+@keyframes whats {
+    0%{
+        transform: translateX(0);
+    }
+    20%{
+        transform: translateX(20px);
+    }
+    40%{
+        transform: translateX(-20px);
+    }
+    60%{
+        transform: translateX(0);
+    }
+}
+
+%vibrar{
+    animation: whats 2s infinite ease-in-out;
+}
+
+
+
+@keyframes scale{
+    from{
+        scale: 1;
+    }
+    to{
+        scale:1.5;
+    }
+}
+
+%scaleup{
+    animation: scale 1s forwards ease-in-out;
+}

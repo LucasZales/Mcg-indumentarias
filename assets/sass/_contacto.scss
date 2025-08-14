@@ -1,0 +1,68 @@
+@use "variables" as v;
+
+form{
+    margin: 0 auto;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(198, 143, 249);
+    padding: 80px;
+    text-align: center;
+    border-radius: 20px;
+    width: 70vh;
+    box-shadow: 5px 5px 10px black;
+    gap: 4px;
+    .boton-contacto{
+        margin-top: 10px;
+        font-family: v.$fuente;
+        background-color: rgb(163, 67, 163);
+        color: black;
+        &:hover {
+        background-color: rgb(214, 83, 105);
+        }
+    }
+    .comentario{
+    margin-top: 10px;
+    height: 100px;
+    width: 400px;
+    padding: 50px;
+    border: none;
+}
+label{
+    font-family: v.$fuente;
+    font-size: 20px;
+}
+input{
+    height: 25px;
+    width: 400px;
+}
+iframe{
+    border-radius: 10px;
+}
+}
+
+@include v.mobile{
+    form{
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        margin-top: 15px;
+        width: 100%;
+        height: 1000px;
+        background-color: brown;
+        margin-bottom: 20px;
+        .comentario{
+        width: 43vh;
+        height: 120px;
+        }
+    }
+    input{
+        width: 20px;
+    }
+    iframe{
+        width: 43vh;
+        height: 300px;
+        border-radius: 5px;
+    }
+}

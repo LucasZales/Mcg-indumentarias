@@ -1,0 +1,49 @@
+@use "variables" as v;
+@use "animations";
+
+.ul-ofertas{
+    display: flex;
+    flex-flow: row wrap;
+    list-style: none;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    justify-content: space-evenly;
+    background-color: pink;
+    border: solid 2px black;
+    border-radius: 50px;
+    color: black;
+    padding: 10px;
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+    padding: 40px;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+    #p-ofertas{
+    text-align: center;
+    border: solid black 1px;
+    background-color: rgb(226, 220, 220);
+    margin-top: 15px;
+    }
+    .img-ofertas{
+    height: 40vh;
+    width: 40vh;
+    &:hover{
+        @extend %scaleup;
+    }
+    }
+}
+@include v.mobile{
+    .ul-ofertas{
+        margin-top: 15px;
+        gap: 20px;
+        width: 360px;
+        display: flex;
+        flex-direction: column;
+        justify-items: center;
+        width: 100%;
+        align-items: center;
+        .img-ofertas{
+            height: 250px;
+            width: 300px;
+        }
+    }
+}

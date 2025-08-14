@@ -1,0 +1,43 @@
+@use "variables" as v;
+
+.color-index{
+    background-color: rgb(224, 172, 101);
+}
+.main-index{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    padding: 80px;
+}
+.img-car{
+    width: 80vh;
+    height: auto; 
+    object-fit: contain;
+}
+.pindex{
+    text-align: center;
+    margin-top: 20px;
+}
+@include v.mobile{
+        .main-index{
+        flex-direction: column;
+        padding: 10px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        }
+        .pindex{
+        margin-top: 25px;
+        padding: 10px;
+        font-size: 1.2rem;
+        text-align: center;
+        }
+        p{
+        text-align: center;
+        font-size: 15px;
+        text-align: left;
+        }
+        .color-index{
+        background-color: rgb(177, 172, 172);
+        }
+        }

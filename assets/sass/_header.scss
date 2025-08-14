@@ -1,0 +1,73 @@
+@use "variables" as v;
+
+header{
+    position: sticky;
+    top: 0px;
+    font-family: v.$fuente;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    background-color: rgb(58, 183, 225);
+    padding: 10px;
+    width: 100%;
+    box-shadow: 5px 5px 10px black;
+    z-index: 10;
+    }
+    .mcg{
+    width: 15vh;
+    height: 15vh;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    }
+h1 {
+    font-family: v.$fuente;
+    color: navy;
+    text-align: center;
+
+}
+nav ul {
+    font-family: v.$fuente;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+    .menu{
+    font-family: v.$fuente;
+    color: antiquewhite;
+    display: flex;
+    border: solid 2px black;
+    padding: 3px 50px;
+    background-color: blue;
+    text-decoration: none;
+    &:hover{
+    background-color: rgb(224, 172, 101);
+    color: black;
+    }
+    }
+}
+@include v.mobile{
+    header{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2px;
+        .mcg{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 10vh;
+        height: 10vh;
+        }
+        .menu{
+        width: 5vw;
+        height: auto;
+        padding: 10px 10px;
+        display: flex;
+        justify-content: center;
+        }
+    }
+    h1{
+        display: none;
+    }
+}
