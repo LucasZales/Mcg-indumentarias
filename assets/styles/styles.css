@@ -299,6 +299,7 @@ footer .foot {
   width: 8vh;
 }
 footer .wp {
+  margin-bottom: 50px;
   position: fixed;
   right: 0;
   bottom: 0;
