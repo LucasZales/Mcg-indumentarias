@@ -230,8 +230,8 @@ header {
 }
 
 .mcg {
-  width: 15vh;
-  height: 15vh;
+  width: 12vh;
+  height: 12vh;
   margin-left: 20px;
   margin-bottom: 10px;
 }
@@ -240,6 +240,7 @@ h1 {
   font-family: Arial, Helvetica, sans-serif;
   color: navy;
   text-align: center;
+  font-size: 5vh;
 }
 
 nav ul {
