@@ -1,11 +1,19 @@
 // - Variables y arrays -
 const iva = 0.21;
 let productos = [
-    { nombre: "Buzos", precio: 15000, stock: 15 },
-    { nombre: "Calzado", precio: 30000, stock: 10 },
-    { nombre: "pantalones", precio: 20000, stock: 15 },
-    { nombre: "remeras", precio: 12000, stock: 8 }
-]
+    "Buzos", "Calzado", "Pantalones",      
+    "Remeras",                       
+];
+
+let precios = [
+    15000, 30000, 40000,
+    12000
+];
+
+let stock = [
+    15, 10 , 13,
+    20
+];
 
 function mostrarProductos() {
     console.log("lista de productos en Mcg indumentarias");
