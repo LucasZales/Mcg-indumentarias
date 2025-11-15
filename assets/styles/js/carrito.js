@@ -1,6 +1,13 @@
 const IVA = 0.21;
 
-let productos = [];
+// Productos definidos directamente
+let productos = [
+    { id: 1, nombre: "Buzos", precio: 15000, stock: 15, stockInicial: 15, img: "../img/buzos.jpeg" },
+    { id: 2, nombre: "Calzados", precio: 30000, stock: 10, stockInicial: 10, img: "../img/calzado.jpeg" },
+    { id: 3, nombre: "Pantalones", precio: 40000, stock: 13, stockInicial: 13, img: "../img/pantalones.jpg" },
+    { id: 4, nombre: "Remeras", precio: 12000, stock: 20, stockInicial: 20, img: "../img/remera.jpeg" },
+];
+
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 // DOM
@@ -10,58 +17,23 @@ const totalSpan = document.getElementById("total");
 const btnVaciar = document.getElementById("vaciar-carrito");
 
 // -----------------------------
-// Cargar productos desde JSON
-// -----------------------------
-async function cargarProductos() {
-    try {
-        // Ruta compatible GitHub Pages y Live Server
-        const res = await fetch("/assets/data/productos.json");
-        if (!res.ok) throw new Error("No se pudo cargar el JSON");
-        productos = await res.json();
-
-        // Guardar stock inicial
-        productos.forEach(p => p.stockInicial = p.stock);
-
-        // Restaurar stock guardado
-        const stockGuardado = JSON.parse(localStorage.getItem("stock"));
-        if (stockGuardado) {
-            productos.forEach((p, i) => {
-                p.stock = stockGuardado[i].stock;
-            });
-        }
-
-        pintarProductos();
-        actualizarCarrito();
-        actualizarStock();
-
-    } catch (error) {
-        console.error("Error cargando productos:", error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudieron cargar los productos',
-        });
-    }
-}
-
-// -----------------------------
 // Pintar productos dinámicamente
 // -----------------------------
 function pintarProductos() {
     contenedorProductos.innerHTML = "";
 
     productos.forEach(producto => {
-        const div = document.createElement("div");
-        div.classList.add("producto");
-        div.innerHTML = `
-            <h3>${producto.nombre}</h3>
-            <p id="precio${producto.id}">$${producto.precio} (Stock: ${producto.stock})</p>
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <img src="${producto.img}" alt="${producto.nombre}" title="${producto.nombre}" class="logo">
+            <p id="id">${producto.nombre}</p>
+            <span class="precio" id="precio${producto.id}">$${producto.precio} (Stock: ${producto.stock})</span>
             <button class="comprar-btn" data-id="${producto.id}">Comprar</button>
+            <span class="mensaje" id="mensaje${producto.id}"></span>
         `;
-        contenedorProductos.appendChild(div);
+        contenedorProductos.appendChild(li);
 
-        const btn = div.querySelector(".comprar-btn");
-        btn.addEventListener("click", () => agregarAlCarrito(producto.id));
+        li.querySelector(".comprar-btn").addEventListener("click", () => agregarAlCarrito(producto.id));
     });
 }
 
@@ -98,8 +70,6 @@ function actualizarStock() {
     localStorage.setItem("stock", JSON.stringify(productos));
 }
 
-// -----------------------------
-// Agregar al carrito
 // -----------------------------
 function agregarAlCarrito(id) {
     const producto = productos.find(p => p.id === id);
@@ -140,8 +110,6 @@ function agregarAlCarrito(id) {
 }
 
 // -----------------------------
-// Vaciar carrito
-// -----------------------------
 btnVaciar.addEventListener("click", () => {
     Swal.fire({
         title: '¿Estás seguro?',
@@ -154,7 +122,7 @@ btnVaciar.addEventListener("click", () => {
     }).then((result) => {
         if (result.isConfirmed) {
             carrito = [];
-            productos.forEach(p => p.stock = p.stockInicial ?? p.stock);
+            productos.forEach(p => p.stock = p.stockInicial);
 
             localStorage.removeItem("carrito");
             localStorage.removeItem("stock");
@@ -175,5 +143,13 @@ btnVaciar.addEventListener("click", () => {
 // -----------------------------
 // Inicializar tienda
 // -----------------------------
-cargarProductos();
+const stockGuardado = JSON.parse(localStorage.getItem("stock"));
+if (stockGuardado) {
+    productos.forEach((p, i) => {
+        p.stock = stockGuardado[i].stock;
+    });
+}
+
+pintarProductos();
 actualizarCarrito();
+actualizarStock();

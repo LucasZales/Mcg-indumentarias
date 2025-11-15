@@ -9,7 +9,6 @@
 <link rel="stylesheet" href="../styles/styles.css">
 <link rel="shortcut icon" href="../img/icotienda.jpg" type="image/x-icon">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Opcional: Font Awesome para icono más profesional -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -29,36 +28,8 @@
 </header>
 
 <main>
-    <ul class="ul">
-        <li>
-            <img src="../img/buzos.jpeg" alt="Buzos" title="Buzos" class="logo">
-            <p id="id">Buzos</p>
-            <span class="precio" id="precio1">$15000 (Stock: 15)</span>
-            <button class="comprar-btn" data-id="1">Comprar</button>
-            <span class="mensaje" id="mensaje1"></span>
-        </li>
-        <li>
-            <img src="../img/calzado.jpeg" alt="Calzados" title="Calzados" class="logo">
-            <p id="id">Calzados</p>
-            <span class="precio" id="precio2">$30000 (Stock: 10)</span>
-            <button class="comprar-btn" data-id="2">Comprar</button>
-            <span class="mensaje" id="mensaje2"></span>
-        </li>
-        <li>
-            <img src="../img/pantalones.jpg" alt="Pantalones" title="Pantalones" class="logo">
-            <p id="id">Pantalones</p>
-            <span class="precio" id="precio3">$40000 (Stock: 13)</span>
-            <button class="comprar-btn" data-id="3">Comprar</button>
-            <span class="mensaje" id="mensaje3"></span>
-        </li>
-        <li>
-            <img src="../img/remera.jpeg" alt="Remeras" title="Remeras" class="logo">
-            <p id="id">Remeras</p>
-            <span class="precio" id="precio4">$12000 (Stock: 20)</span>
-            <button class="comprar-btn" data-id="4">Comprar</button>
-            <span class="mensaje" id="mensaje4"></span>
-        </li>
-    </ul>
+    <!-- Contenedor dinámico de productos -->
+    <ul id="productos" class="ul"></ul>
 
     <section>
         <h3>🛒 Carrito de compras</h3>
