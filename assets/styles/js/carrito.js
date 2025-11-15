@@ -13,7 +13,7 @@ const btnVaciar = document.getElementById("vaciar-carrito");
 // -----------------------------
 async function cargarProductos() {
     try {
-        const res = await fetch("/assets/data/productos.json");
+        const res = await fetch("../../assets/data/productos.json");
         productos = await res.json();
 
         // Guardar stock inicial
