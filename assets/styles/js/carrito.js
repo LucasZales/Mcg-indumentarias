@@ -1,6 +1,5 @@
 const IVA = 0.21;
 
-// Productos definidos directamente
 let productos = [
     { id: 1, nombre: "Buzos", precio: 15000, stock: 15, stockInicial: 15, img: "../img/buzos.jpeg" },
     { id: 2, nombre: "Calzados", precio: 30000, stock: 10, stockInicial: 10, img: "../img/calzado.jpeg" },
@@ -10,15 +9,11 @@ let productos = [
 
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-// DOM
 const contenedorProductos = document.getElementById("productos");
 const carritoLista = document.getElementById("carrito");
 const totalSpan = document.getElementById("total");
 const btnVaciar = document.getElementById("vaciar-carrito");
 
-// -----------------------------
-// Pintar productos dinámicamente
-// -----------------------------
 function pintarProductos() {
     contenedorProductos.innerHTML = "";
 
@@ -37,12 +32,10 @@ function pintarProductos() {
     });
 }
 
-// -----------------------------
 function calcularPrecioConIVA(precio) {
     return precio * (1 + IVA);
 }
 
-// -----------------------------
 function actualizarCarrito() {
     carritoLista.innerHTML = "";
 
@@ -58,7 +51,6 @@ function actualizarCarrito() {
     localStorage.setItem("carrito", JSON.stringify(carrito));
 }
 
-// -----------------------------
 function actualizarStock() {
     productos.forEach(producto => {
         const span = document.getElementById(`precio${producto.id}`);
@@ -70,7 +62,6 @@ function actualizarStock() {
     localStorage.setItem("stock", JSON.stringify(productos));
 }
 
-// -----------------------------
 function agregarAlCarrito(id) {
     const producto = productos.find(p => p.id === id);
 
@@ -140,9 +131,7 @@ btnVaciar.addEventListener("click", () => {
     });
 });
 
-// -----------------------------
-// Inicializar tienda
-// -----------------------------
+
 const stockGuardado = JSON.parse(localStorage.getItem("stock"));
 if (stockGuardado) {
     productos.forEach((p, i) => {
@@ -150,6 +139,6 @@ if (stockGuardado) {
     });
 }
 
-pintarProductos();
+pintarProductos(); 
 actualizarCarrito();
 actualizarStock();
