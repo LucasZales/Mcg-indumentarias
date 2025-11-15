@@ -4,16 +4,19 @@ let productos = [];
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 // DOM
+const contenedorProductos = document.getElementById("productos");
 const carritoLista = document.getElementById("carrito");
 const totalSpan = document.getElementById("total");
 const btnVaciar = document.getElementById("vaciar-carrito");
 
 // -----------------------------
-//  Cargar productos con fetch
+// Cargar productos desde JSON
 // -----------------------------
 async function cargarProductos() {
     try {
-        const res = await fetch("../../assets/data/productos.json");
+        // Ruta compatible GitHub Pages y Live Server
+        const res = await fetch("/assets/data/productos.json");
+        if (!res.ok) throw new Error("No se pudo cargar el JSON");
         productos = await res.json();
 
         // Guardar stock inicial
@@ -42,14 +45,22 @@ async function cargarProductos() {
 }
 
 // -----------------------------
-//  Pintar productos y agregar eventos
+// Pintar productos dinámicamente
 // -----------------------------
 function pintarProductos() {
-    productos.forEach(producto => {
-        const precioSpan = document.getElementById(`precio${producto.id}`);
-        precioSpan.textContent = `$${producto.precio} (Stock: ${producto.stock})`;
+    contenedorProductos.innerHTML = "";
 
-        const btn = document.querySelector(`.comprar-btn[data-id="${producto.id}"]`);
+    productos.forEach(producto => {
+        const div = document.createElement("div");
+        div.classList.add("producto");
+        div.innerHTML = `
+            <h3>${producto.nombre}</h3>
+            <p id="precio${producto.id}">$${producto.precio} (Stock: ${producto.stock})</p>
+            <button class="comprar-btn" data-id="${producto.id}">Comprar</button>
+        `;
+        contenedorProductos.appendChild(div);
+
+        const btn = div.querySelector(".comprar-btn");
         btn.addEventListener("click", () => agregarAlCarrito(producto.id));
     });
 }
@@ -79,7 +90,9 @@ function actualizarCarrito() {
 function actualizarStock() {
     productos.forEach(producto => {
         const span = document.getElementById(`precio${producto.id}`);
-        span.textContent = `$${producto.precio} (Stock: ${producto.stock})`;
+        if (span) {
+            span.textContent = `$${producto.precio} (Stock: ${producto.stock})`;
+        }
     });
 
     localStorage.setItem("stock", JSON.stringify(productos));
@@ -95,7 +108,7 @@ function agregarAlCarrito(id) {
         Swal.fire({
             icon: 'error',
             title: 'Sin stock',
-            text: `No hay stock disponible de ${producto.nombre}`,
+            text: `No hay stock disponible de ${producto?.nombre || ""}`,
             timer: 1500,
             showConfirmButton: false
         });
@@ -127,7 +140,7 @@ function agregarAlCarrito(id) {
 }
 
 // -----------------------------
-// Vaciar carrito con confirmación
+// Vaciar carrito
 // -----------------------------
 btnVaciar.addEventListener("click", () => {
     Swal.fire({
@@ -163,3 +176,4 @@ btnVaciar.addEventListener("click", () => {
 // Inicializar tienda
 // -----------------------------
 cargarProductos();
+actualizarCarrito();
