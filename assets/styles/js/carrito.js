@@ -1,86 +1,165 @@
-    const IVA = 0.21;
+const IVA = 0.21;
 
-    // Productos con stock y stock inicial
-    const productos = [
-    { id: 1, nombre: "Buzos", precio: 15000, stock: 15, stockInicial: 15 },
-    { id: 2, nombre: "Calzados", precio: 30000, stock: 10, stockInicial: 10 },
-    { id: 3, nombre: "Pantalones", precio: 40000, stock: 13, stockInicial: 13 },
-    { id: 4, nombre: "Remeras", precio: 12000, stock: 20, stockInicial: 20 }
-    ];
+let productos = [];
+let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    let carrito = [];
+// DOM
+const carritoLista = document.getElementById("carrito");
+const totalSpan = document.getElementById("total");
+const btnVaciar = document.getElementById("vaciar-carrito");
 
-    const carritoLista = document.getElementById("carrito");
-    const totalSpan = document.getElementById("total");
-    const botonesComprar = document.querySelectorAll(".comprar-btn");
-    const btnVaciar = document.getElementById("vaciar-carrito");
+// -----------------------------
+//  Cargar productos con fetch
+// -----------------------------
+async function cargarProductos() {
+    try {
+        const res = await fetch("/assets/data/productos.json");
+        productos = await res.json();
 
+        // Guardar stock inicial
+        productos.forEach(p => p.stockInicial = p.stock);
 
-    const calcularPrecioConIVA = (precio) => precio * (1 + IVA)
-    function actualizarCarrito() {
+        // Restaurar stock guardado
+        const stockGuardado = JSON.parse(localStorage.getItem("stock"));
+        if (stockGuardado) {
+            productos.forEach((p, i) => {
+                p.stock = stockGuardado[i].stock;
+            });
+        }
+
+        pintarProductos();
+        actualizarCarrito();
+        actualizarStock();
+
+    } catch (error) {
+        console.error("Error cargando productos:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudieron cargar los productos',
+        });
+    }
+}
+
+// -----------------------------
+//  Pintar productos y agregar eventos
+// -----------------------------
+function pintarProductos() {
+    productos.forEach(producto => {
+        const precioSpan = document.getElementById(`precio${producto.id}`);
+        precioSpan.textContent = `$${producto.precio} (Stock: ${producto.stock})`;
+
+        const btn = document.querySelector(`.comprar-btn[data-id="${producto.id}"]`);
+        btn.addEventListener("click", () => agregarAlCarrito(producto.id));
+    });
+}
+
+// -----------------------------
+function calcularPrecioConIVA(precio) {
+    return precio * (1 + IVA);
+}
+
+// -----------------------------
+function actualizarCarrito() {
     carritoLista.innerHTML = "";
+
     carrito.forEach(item => {
         const li = document.createElement("li");
-        li.classList.add("li");
         li.textContent = `${item.cantidad} x ${item.nombre} = $${item.total.toFixed(2)}`;
         carritoLista.appendChild(li);
     });
 
     const total = carrito.reduce((acc, item) => acc + item.total, 0);
     totalSpan.textContent = total.toFixed(2);
+
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+}
+
+// -----------------------------
+function actualizarStock() {
+    productos.forEach(producto => {
+        const span = document.getElementById(`precio${producto.id}`);
+        span.textContent = `$${producto.precio} (Stock: ${producto.stock})`;
+    });
+
+    localStorage.setItem("stock", JSON.stringify(productos));
+}
+
+// -----------------------------
+// Agregar al carrito
+// -----------------------------
+function agregarAlCarrito(id) {
+    const producto = productos.find(p => p.id === id);
+
+    if (!producto || producto.stock <= 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Sin stock',
+            text: `No hay stock disponible de ${producto.nombre}`,
+            timer: 1500,
+            showConfirmButton: false
+        });
+        return;
     }
 
-    function actualizarStock() {
-    productos.forEach(producto => {
-        const precioSpan = document.getElementById(`precio${producto.id}`);
-        precioSpan.textContent = `$${producto.precio} (Stock: ${producto.stock})`;
-    });
+    producto.stock--;
+
+    const totalProducto = calcularPrecioConIVA(producto.precio);
+    const existente = carrito.find(item => item.nombre === producto.nombre);
+
+    if (existente) {
+        existente.cantidad++;
+        existente.total += totalProducto;
+    } else {
+        carrito.push({ nombre: producto.nombre, cantidad: 1, total: totalProducto });
     }
 
-    botonesComprar.forEach(btn => {
-    btn.addEventListener("click", () => {
-        const id = parseInt(btn.dataset.id);
-        const producto = productos.find(p => p.id === id);
-
-        if (producto.stock > 0) {
-        producto.stock--;
-
-        const totalProducto = calcularPrecioConIVA(producto.precio);
-
-        const existente = carrito.find(item => item.nombre === producto.nombre);
-        if (existente) {
-            existente.cantidad++;
-            existente.total += totalProducto;
-        } else {
-            carrito.push({ nombre: producto.nombre, cantidad: 1, total: totalProducto });
-        }
-
-        actualizarCarrito();
-        actualizarStock();
-
-        const mensajeSpan = document.getElementById(`mensaje${id}`);
-        mensajeSpan.textContent = `✅ ${producto.nombre} agregado al carrito`;
-        mensajeSpan.style.color = "green";
-
-        setTimeout(() => {
-            mensajeSpan.textContent = "";
-        }, 2000);
-
-        } else {
-        alert("Sin stock disponible para este producto.");
-        }
-    });
-    });
-
-    // Vaciar carrito y restaurar stock
-    btnVaciar.addEventListener("click", () => {
-    carrito = [];
-    productos.forEach(producto => {
-        producto.stock = producto.stockInicial;
-    });
     actualizarCarrito();
     actualizarStock();
-    });
 
-    // Inicializa stock al cargar la página
-    actualizarStock();
+    Swal.fire({
+        icon: 'success',
+        title: 'Producto agregado',
+        text: `${producto.nombre} se agregó al carrito`,
+        timer: 1500,
+        showConfirmButton: false
+    });
+}
+
+// -----------------------------
+// Vaciar carrito con confirmación
+// -----------------------------
+btnVaciar.addEventListener("click", () => {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Se eliminarán todos los productos del carrito",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, vaciar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            carrito = [];
+            productos.forEach(p => p.stock = p.stockInicial ?? p.stock);
+
+            localStorage.removeItem("carrito");
+            localStorage.removeItem("stock");
+
+            actualizarCarrito();
+            actualizarStock();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Carrito vaciado',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+    });
+});
+
+// -----------------------------
+// Inicializar tienda
+// -----------------------------
+cargarProductos();
